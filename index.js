@@ -4,7 +4,7 @@ const logger = require('./util/logger.js');
 let components = {};
 
 logger.info('==================================');
-logger.info('        scratch-helper');
+logger.info('          clipcc-cutie');
 logger.info('       作者：SinanGentoo');
 logger.info('==================================');
 logger.info('读取配置文件并尝试创建实例...');
@@ -26,11 +26,11 @@ function login () {
         client.on('system.login.slider', function (e) {
             logger.log('本次登录需要滑动验证码，请在验证后输入ticket并回车。')
             process.stdin.once('data', (ticket) => this.submitSlider(ticket))
-        }).login(config.password)
+        }).login(config.password);
     }
     
     client.on('system.online', () => {
-        logger.info("已登录!开始加载组件...");
+        logger.info('已登录!开始加载组件...');
         loadComponents();
     });
 }
@@ -50,13 +50,13 @@ function loadComponents () {
     }
     
     // 设置触发事件
-    client.on("message.group", async (e) => {
+    client.on('message.group', async (e) => {
         for (const id in components) components[id].onGroupMessage(e);
     });
-    client.on("message.private", async (e) => {
+    client.on('message.private', async (e) => {
         for (const id in components) components[id].onPrivateMessage(e);
     });
-    client.on("request.friend", async (e) => {
+    client.on('request.friend', async (e) => {
         for (const id in components) components[id].onRequestFriend(e);
     });
 }
