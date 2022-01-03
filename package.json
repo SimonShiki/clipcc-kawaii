@@ -1,0 +1,20 @@
+{
+  "name": "clipcc-man",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": "https://github.com/Clipteam/clipcc-man",
+  "author": "SinanGentoo",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "dayjs": "^1.10.7",
+    "node-localstorage": "^2.2.1",
+    "oicq": "^2.1.8"
+  },
+  "devDependencies": {
+    "colors": "^1.4.0"
+  }
+}

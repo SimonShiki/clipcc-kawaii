@@ -1,0 +1,14 @@
+# Mac OS
+.DS_Store
+
+# NPM
+/node_modules
+npm-*
+yarn-error.log
+
+.vscode
+
+config.json
+/data
+/luck
+/scripts
