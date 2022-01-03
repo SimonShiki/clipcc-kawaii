@@ -15,7 +15,7 @@ class Compiler {
     }
     
     onGroupMessage (session) {
-        if (data.raw_message == '编译下预览站') {
+        if (session.raw_message == '编译下预览站') {
             if (this.isInList(session.user_id)) this.compile(session);
             else session.reply('权限不足', true);
         }

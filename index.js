@@ -3,10 +3,10 @@ const config = require('./config.json');
 const logger = require('./util/logger.js');
 let components = {};
 
-logger.info('==================================');
+logger.info('=================================');
 logger.info('          clipcc-cutie');
 logger.info('       作者：SinanGentoo');
-logger.info('==================================');
+logger.info('=================================');
 logger.info('读取配置文件并尝试创建实例...');
 const client = createClient(config.qq, {
     log_level: config.debug_mode ? 'mark' : 'off',
@@ -51,12 +51,30 @@ function loadComponents () {
     
     // 设置触发事件
     client.on('message.group', async (e) => {
-        for (const id in components) components[id].onGroupMessage(e);
+        for (const id in components) {
+            try {
+                components[id].onGroupMessage(e);
+            } catch (e) {
+                logger.error(e);
+            }
+        }
     });
     client.on('message.private', async (e) => {
-        for (const id in components) components[id].onPrivateMessage(e);
+        for (const id in components) {
+            try {
+                components[id].onPrivateMessage(e);
+            } catch (e) {
+                logger.error(e);
+            }
+        }
     });
     client.on('request.friend', async (e) => {
-        for (const id in components) components[id].onRequestFriend(e);
+        for (const id in components) {
+            try {
+                components[id].onRequestFriend(e);
+            } catch (e) {
+                logger.error(e);
+            }
+        }
     });
 }

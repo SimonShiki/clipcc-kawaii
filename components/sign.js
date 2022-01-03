@@ -13,9 +13,9 @@ class Sign {
     }
     
     onGroupMessage (session) {
-        if (data.raw_message === '签到') {
-            const jrrp = parseInt(data.user_id / this.getSeed()) % 101;
-            data.reply('签到成功(≧▽≦)！你今天的人品是：'+ jrrp);
+        if (session.raw_message === '签到') {
+            const jrrp = parseInt(session.user_id / this.getSeed()) % 101;
+            session.reply('签到成功(≧▽≦)！你今天的人品是：'+ jrrp);
         }
     }
 
@@ -23,7 +23,7 @@ class Sign {
         const now = dayjs().format('DD/MM/YYYY');
         if (now !== storage.getItem('date')) {
             storage.setItem('seed', Math.round(Math.random() * 100));
-            storage.setItem('date', date.format(new Date(), 'YYYY-MM-DD'));
+            storage.setItem('date', now);
         }
         return parseInt(storage.getItem('seed'));
     }
