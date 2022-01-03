@@ -34,6 +34,25 @@ class Compiler {
         }
     }
     
+    onPrivateMessage (session) {
+        if (session.raw_message === '编译下预览站') {
+            if (this.isInList(session.user_id)) {
+                if (storage.getItem('lock') !== 'locked') {
+                    storage.setItem('lock', 'locked');
+                    this.compile(session);
+                } else session.reply("🔒已有一个进程正在运行")
+            } else session.reply('权限不足', true);
+        }
+        if (session.raw_message == '更新下预览站') {
+            if (this.isInList(session.user_id)) {
+                if (storage.getItem('lock') !== 'locked') {
+                    storage.setItem('lock', 'locked');
+                    this.update(session);
+                } else session.reply("🔒已有一个进程正在运行")
+            } else session.reply('权限不足', true);
+        }
+    }
+    
     isInList (id) {
         const isAdmin = config.admin.includes(id);
         return isAdmin;

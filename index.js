@@ -53,7 +53,7 @@ function loadComponents () {
     client.on('message.group', async (e) => {
         for (const id in components) {
             try {
-                components[id].onGroupMessage(e);
+                if (components[id].onGroupMessage) components[id].onGroupMessage(e);
             } catch (e) {
                 logger.error(e);
             }
@@ -62,7 +62,7 @@ function loadComponents () {
     client.on('message.private', async (e) => {
         for (const id in components) {
             try {
-                components[id].onPrivateMessage(e);
+                if (components[id].onPrivateMessage) components[id].onPrivateMessage(e);
             } catch (e) {
                 logger.error(e);
             }
@@ -71,7 +71,7 @@ function loadComponents () {
     client.on('request.friend', async (e) => {
         for (const id in components) {
             try {
-                components[id].onRequestFriend(e);
+                if (components[id].onRequestFriend) components[id].onRequestFriend(e);
             } catch (e) {
                 logger.error(e);
             }
