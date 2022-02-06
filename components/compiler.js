@@ -1,5 +1,6 @@
 const process = require('child_process');
 const LocalStorage = require('node-localstorage').LocalStorage;
+const axios = require('axios');
 const storage = new LocalStorage('./compiler');
 
 const config = require('../config.json');
@@ -21,6 +22,14 @@ class Compiler {
                 if (storage.getItem('lock') !== 'locked') {
                     storage.setItem('lock', 'locked');
                     this.compile(session);
+                } else session.reply("🔒已有一个进程正在运行")
+            } else session.reply('权限不足', true);
+        }
+        if (session.raw_message == '同步下镜像站') {
+            if (this.isInList(session.user_id)) {
+                if (storage.getItem('lock') !== 'locked') {
+                    storage.setItem('lock', 'locked');
+                    this.sync(session);
                 } else session.reply("🔒已有一个进程正在运行")
             } else session.reply('权限不足', true);
         }
@@ -70,6 +79,11 @@ class Compiler {
         } catch (e) {
             logger.error('重编译期间出现错误：' + e);
         }
+    }
+    
+    async sync (session) {
+        axios.get('https://mirror1.codingclip.com/api/kpa23qNG01txDzbTZ8PybchMemZmG5jq/updmirror');
+        session.reply('👀 同步镜像站请求已发送!');
     }
     
     async update (session) {
