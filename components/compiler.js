@@ -84,7 +84,6 @@ class Compiler {
     async sync (session) {
         const {body} = await axios.get('https://mirror1.codingclip.com/api/kpa23qNG01txDzbTZ8PybchMemZmG5jq/updmirror');
         storage.setItem('lock', 'unlocked');
-        this.client.sendPrivateMsg(session.user_id, body);
         session.reply('👀 同步镜像站请求已发送!');
     }
     
