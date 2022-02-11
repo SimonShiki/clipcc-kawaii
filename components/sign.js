@@ -39,7 +39,7 @@ class Sign {
                 session.reply('你知道吗，反复签到可是要掉脑袋的(๑•﹏•)');
             } else {
                 try {
-                    this.client.setGroupBan(session.group_id, session.user_id, attempt * 120);
+                    this.client.setGroupBan(session.group_id, session.user_id, 2 ** attempt * 60);
                     const poisonous = await axios.get('https://api.muxiaoguo.cn/api/dujitang');
                     session.reply(poisonous.data.data.comment);
                 } catch (e) {}
@@ -50,6 +50,7 @@ class Sign {
     getSeed () {
         const now = dayjs().format('DD/MM/YYYY');
         if (now !== storage.getItem('date')) {
+            storage.setItem('user', '{}');
             storage.setItem('seed', Math.round(Math.random() * 100));
             storage.setItem('date', now);
         }
