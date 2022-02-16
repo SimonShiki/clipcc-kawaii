@@ -1,4 +1,5 @@
 const logger = require('../util/logger.js');
+const config = require('../config.json');
 const LocalStorage = require('node-localstorage').LocalStorage;
 const storage = new LocalStorage('./luck');
 const axios = require('axios');
@@ -7,6 +8,15 @@ const dayjs = require('dayjs');
 class Sign {
     constructor (client) {
         this.client = client;
+    }
+    
+    refresh () {
+        const now = dayjs().format('DD/MM/YYYY');
+        if (now !== storage.getItem('date')) {
+            storage.setItem('user', '{}');
+            storage.setItem('seed', Math.round(Math.random() * 100));
+            storage.setItem('date', now);
+        }
     }
     
     attempt (id) {
@@ -30,30 +40,25 @@ class Sign {
     }
     
     async onGroupMessage (session) {
-        if (session.raw_message === '签到') {
+        this.refresh();
+        if (session.raw_message === '签到' && config.workgroup.includes(session.group_id)) {
             const attempt = await this.attempt(parseInt(session.user_id));
             if (attempt <= 1) {
-                const jrrp = parseInt(session.user_id / this.getSeed()) % 101;
+                const jrrp = parseInt(session.user_id / this.seed % 101);
                 session.reply('签到成功(≧▽≦)！你今天的人品是：'+ jrrp);
             } else if (attempt == 2) {
                 session.reply('你知道吗，反复签到可是要掉脑袋的(๑•﹏•)');
             } else {
                 try {
-                    this.client.setGroupBan(session.group_id, session.user_id, 2 ** attempt * 60);
-                    const poisonous = await axios.get('https://api.muxiaoguo.cn/api/dujitang');
-                    session.reply(poisonous.data.data.comment);
+                    this.client.setGroupBan(session.group_id, session.user_id, attempt ** attempt * 60);
+                    //const poisonous = await axios.get('https://api.muxiaoguo.cn/api/dujitang');
+                    //session.reply(poisonous.data.data.comment);
                 } catch (e) {}
             }
         }
     }
 
-    getSeed () {
-        const now = dayjs().format('DD/MM/YYYY');
-        if (now !== storage.getItem('date')) {
-            storage.setItem('user', '{}');
-            storage.setItem('seed', Math.round(Math.random() * 100));
-            storage.setItem('date', now);
-        }
+    get seed () {
         return parseInt(storage.getItem('seed'));
     }
 }
