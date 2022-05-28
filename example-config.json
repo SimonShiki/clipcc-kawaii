@@ -2,6 +2,7 @@
     "qq": 1145141919,
     "platform": 1,
     "password": "",
+    "use_guild": false,
     "components": ["sign"],
     "admin": [],
     "user": [],

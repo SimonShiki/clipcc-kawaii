@@ -13,7 +13,8 @@
     "axios": "^0.21.1",
     "dayjs": "^1.10.7",
     "node-localstorage": "^2.2.1",
-    "oicq": "^2.1.8"
+    "oicq": "^2.2.3",
+    "oicq-guild": "^0.1.0"
   },
   "devDependencies": {
     "colors": "^1.4.0"

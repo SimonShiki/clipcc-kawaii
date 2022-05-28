@@ -1,17 +1,41 @@
 const { createClient } = require('oicq');
+const { GuildApp } = require("oicq-guild");
+
 const config = require('./config.json');
 const logger = require('./util/logger.js');
-let components = {};
+const components = {};
+let guild = {};
 
 logger.info('=================================');
 logger.info('          clipcc-cutie');
 logger.info('       作者：SinanGentoo');
 logger.info('=================================');
 logger.info('读取配置文件并尝试创建实例...');
+if (config.debug_mode) {
+    logger.warn('调试模式已开启！');
+    process.stdin.on("data", async (data) => {
+	    const cmd = String(data).trim()
+	    try {
+		    const res = await eval(cmd)
+		    console.log(res)
+	    } catch (e) {
+		    console.log(e)
+	    }
+    });
+}
 const client = createClient(config.qq, {
     log_level: config.debug_mode ? 'mark' : 'off',
     platform: config.platform
 });
+
+logger.info('初始化接口...');
+initializeCoreApi();
+if (config.use_guild) {
+    logger.info('频道功能已启用！初始化相关 API 中');
+    guild = GuildApp.bind(client);
+    initializeGuildApi();
+}
+
 logger.info('尝试登录...');
 login();
 
@@ -31,25 +55,12 @@ function login () {
     
     client.on('system.online', () => {
         logger.info('已登录!开始加载组件...');
+        if (guild instanceof GuildApp) guild.reloadGuilds();
         loadComponents();
     });
 }
 
-function loadComponents () {
-    // 加载组件
-    for (const componentId in config.components) {
-        const name = config.components[componentId];
-        try {
-            const Component = require(`./components/${name}`);
-            components[name] = new Component(client);
-            components[name].activate();
-            logger.info(`组件 ${name} 已被激活!`);
-        } catch (e) {
-            logger.error(`加载组件 ${name} 时发生错误: ${e}`);
-        }
-    }
-    
-    // 设置触发事件
+function initializeCoreApi () {
     client.on('message.group', async (e) => {
         for (const id in components) {
             try {
@@ -77,4 +88,41 @@ function loadComponents () {
             }
         }
     });
+}
+
+function initializeGuildApi () {
+    guild.on('ready', async () => {
+        for (const id in components) {
+            try {
+                if (components[id].onGuildReady) components[id].onGuildReady();
+            } catch (e) {
+                logger.error(e);
+            }
+        }
+    });
+    guild.on('message', async (e) => {
+        for (const id in components) {
+            try {
+                if (components[id].onGuildMessage) components[id].onGuildMessage(e);
+            } catch (e) {
+                logger.error(e);
+            }
+        }
+    });
+}
+
+function loadComponents () {
+    // 加载组件
+    for (const componentId in config.components) {
+        const name = config.components[componentId];
+        try {
+            const Component = require(`./components/${name}`);
+            components[name] = new Component(client, guild);
+            if (components[name].activate) components[name].activate();
+            logger.info(`组件 ${name} 已被激活!`);
+        } catch (e) {
+            delete components[name];
+            logger.error(`加载组件 ${name} 时发生错误:\n ${e}`);
+        }
+    }
 }
