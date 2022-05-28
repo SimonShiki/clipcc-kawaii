@@ -18,6 +18,7 @@ class Execution {
     async onGroupMessage (session) {
         this.handleCpp(session);
         this.handleJs(session);
+        this.handlePy3(session);
     }
     
     async handleCpp (session) {
