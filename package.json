@@ -14,7 +14,8 @@
     "dayjs": "^1.10.7",
     "node-localstorage": "^2.2.1",
     "oicq": "^2.2.3",
-    "oicq-guild": "^0.1.0"
+    "oicq-guild": "^0.1.0",
+    "piston-client": "^1.0.2"
   },
   "devDependencies": {
     "colors": "^1.4.0"
