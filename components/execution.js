@@ -33,7 +33,7 @@ class Execution {
             language: 'cpp',
             version: '10.2.0'
         }, session.raw_message.slice(5));
-        if (result.run.stderr) session.reply('运行失败:\n' + result.compile ? result.compile.stderr : result.run.stderr, true)
+        if (result.run.hasOwnProperty('stderr')) session.reply('运行失败:\n' + result.compile.stderr, true)
         else session.reply('运行结果:\n' + result.run.stdout, true);
     }
     
@@ -46,7 +46,7 @@ class Execution {
             language: 'javascript',
             version: '1.7.5'
         }, session.raw_message.slice(4));
-        if (result.run.stderr) session.reply('运行失败:\n' + result.compile ? result.compile.stderr : result.run.stderr, true)
+        if (result.run.hasOwnProperty('stderr')) session.reply('运行失败:\n' + result.compile.stderr, true)
         else session.reply('运行结果:\n' + result.run.stdout, true);
     }
     
@@ -59,7 +59,7 @@ class Execution {
             language: 'python3',
             version: '3.10.0'
         }, session.raw_message.slice(4));
-        if (result.run.stderr) session.reply('运行失败:\n' + result.compile ? result.compile.stderr : result.run.stderr, true)
+        if (result.run.hasOwnProperty('stderr')) session.reply('运行失败:\n' + result.compile.stderr, true)
         else session.reply('运行结果:\n' + result.run.stdout, true);
     }
     
@@ -72,7 +72,7 @@ class Execution {
             language: 'go',
             version: '1.16.2'
         }, session.raw_message.slice(4));
-        if (result.run.stderr) session.reply('运行失败:\n' + result.compile ? result.compile.stderr : result.run.stderr, true)
+        if (result.run.hasOwnProperty('stderr')) session.reply('运行失败:\n' + result.compile.stderr, true)
         else session.reply('运行结果:\n' + result.run.stdout, true);
     }
     
@@ -85,7 +85,7 @@ class Execution {
             language: 'lua',
             version: '5.4.2'
         }, session.raw_message.slice(5));
-        if (result.run.stderr) session.reply('运行失败:\n' + result.compile ? result.compile.stderr : result.run.stderr, true)
+        if (result.run.hasOwnProperty('stderr')) session.reply('运行失败:\n' + result.compile.stderr, true)
         else session.reply('运行结果:\n' + result.run.stdout, true);
     }
     
@@ -98,7 +98,7 @@ class Execution {
             language: 'bash',
             version: '5.1.0'
         }, session.raw_message.slice(6));
-        if (result.run.stderr) session.reply('运行失败:\n' + result.compile ? result.compile.stderr : result.run.stderr, true)
+        if (result.run.hasOwnProperty('stderr')) session.reply('运行失败:\n' + result.compile.stderr, true)
         else session.reply('运行结果:\n' + result.run.stdout, true);
     }
 }
