@@ -40,8 +40,10 @@ class Execution {
             session.reply(result.trim());
         }
         let answer = '';
-        if ('stdout' in result.run) result += 'STDOUT:\n' + result.run.stdout;
-        if ('stderr' in result.run) result += '\nSTDERR:\n' + result.run.stderr;
+        if ('run' in result && 'stdout' in result.run) result += 'STDOUT:\n' + result.run.stdout;
+        if ('run' in result && 'stderr' in result.run) result += '\nSTDERR:\n' + result.run.stderr;
+        
+        if (answer === '') session.reply(JSON.stringify(result));
         else session.reply(result.trim(), true);
     };
 }
