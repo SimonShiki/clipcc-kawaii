@@ -40,8 +40,8 @@ class Execution {
             session.reply(answer.trim());
         }
         let answer = '';
-        if ('run' in result && 'stdout' in result.run) answer += 'STDOUT:\n' + result.run.stdout;
-        if ('run' in result && 'stderr' in result.run) answer += '\nSTDERR:\n' + result.run.stderr;
+        if ('run' in result && 'stdout' in result.run && result.run.stdout.trim() != '') answer += 'STDOUT:\n' + result.run.stdout;
+        if ('run' in result && 'stderr' in result.run && result.run.stderr.trim() != '') answer += '\nSTDERR:\n' + result.run.stderr;
         
         if (answer === '') session.reply(JSON.stringify(result));
         else session.reply(answer.trim(), true);
