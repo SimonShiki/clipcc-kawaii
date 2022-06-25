@@ -36,10 +36,10 @@ class Execution {
             version: version
         }, session.raw_message.slice(command.length));
         if (stderr in result.compile) {
-            let result = `编译失败:\n${result.compile.stderr}:`;
+            let answer = `编译失败:\n${result.compile.stderr}:`;
             session.reply(result.trim());
         }
-        let result = `STDOUT:\n${result.run.stdout}`;
+        let answer = `STDOUT:\n${result.run.stdout}`;
         if (stderr in result.run) result += '\nSTDERR:\n' + result.run.stderr;
         else session.reply(result.trim(), true);
     };
