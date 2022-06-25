@@ -17,7 +17,7 @@ class Execution {
     
     async onGroupMessage (session) {
         this.handleRequest(session, 'cpp', '10.2.0');
-        this.handleRequest(session, 'javascript', '1.7.5');
+        this.handleRequest(session, 'javascript', '1.16.2');
         this.handleRequest(session, 'python3', '3.1.10');
         this.handleRequest(session, 'go', '1.16.2');
         this.handleRequest(session, 'lua', '5.4.2');
@@ -37,14 +37,14 @@ class Execution {
         }, session.raw_message.slice(command.length));
         if ('compile' in result && 'stderr' in result.compile) {
             let answer = `编译失败:\n${result.compile.stderr}:`;
-            session.reply(result.trim());
+            session.reply(answer.trim());
         }
         let answer = '';
-        if ('run' in result && 'stdout' in result.run) result += 'STDOUT:\n' + result.run.stdout;
-        if ('run' in result && 'stderr' in result.run) result += '\nSTDERR:\n' + result.run.stderr;
+        if ('run' in result && 'stdout' in result.run) answer += 'STDOUT:\n' + result.run.stdout;
+        if ('run' in result && 'stderr' in result.run) answer += '\nSTDERR:\n' + result.run.stderr;
         
         if (answer === '') session.reply(JSON.stringify(result));
-        else session.reply(result.trim(), true);
+        else session.reply(answer.trim(), true);
     };
 }
 
