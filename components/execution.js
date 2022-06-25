@@ -19,6 +19,7 @@ class Execution {
         this.handleRequest(session, 'cpp', '10.2.0');
         this.handleRequest(session, 'javascript', '1.16.2');
         this.handleRequest(session, 'python3', '3.1.10');
+        this.handleRequest(session, 'rust', '1.56.1');
         this.handleRequest(session, 'go', '1.16.2');
         this.handleRequest(session, 'lua', '5.4.2');
         this.handleRequest(session, 'bash', '5.1.0');
