@@ -39,7 +39,8 @@ class Execution {
             let answer = `编译失败:\n${result.compile.stderr}:`;
             session.reply(result.trim());
         }
-        let answer = `STDOUT:\n${result.run.stdout}`;
+        let answer = '';
+        if ('stdout' in result.run) result += 'STDOUT:\n' + result.run.stdout;
         if ('stderr' in result.run) result += '\nSTDERR:\n' + result.run.stderr;
         else session.reply(result.trim(), true);
     };
