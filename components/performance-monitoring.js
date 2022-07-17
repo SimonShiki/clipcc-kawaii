@@ -23,7 +23,7 @@ class PerformanceMonitoring {
 
     async broadcast (message) {
         const fresh = message;
-        for (const groupid of config.broadcast_group) {
+        for (const groupid of config.performance_work_group) {
             this.client.sendGroupMsg(groupid, fresh);
             logger.info('群聊' + groupid + '推送成功!');
             await this.sleep(1000);
