@@ -6,5 +6,7 @@
     "components": ["sign"],
     "admin": [],
     "user": [],
+    "broadcast_group": [],
+    "five_mins_average_load_limit": 0.6,
     "debug_mode": false
 }
