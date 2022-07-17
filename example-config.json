@@ -8,5 +8,6 @@
     "user": [],
     "broadcast_group": [],
     "five_mins_average_load_limit": 0.6,
+    "performance_work_group": 114514,
     "debug_mode": false
 }
