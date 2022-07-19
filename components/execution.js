@@ -37,7 +37,7 @@ class Execution {
             version: version
         }, session.raw_message.slice(command.length));
         if ('compile' in result && 'stderr' in result.compile) {
-            let answer = `编译失败:\n${result.compile.stderr}:`;
+            let answer = `编译失败:\n${result.compile.stderr}`;
             session.reply(answer.trim());
             return;
         }

@@ -13,16 +13,11 @@ logger.info('=================================');
 logger.info('读取配置文件并尝试创建实例...');
 if (config.debug_mode) {
     logger.warn('调试模式已开启！');
-    process.stdin.on("data", async (data) => {
-	    const cmd = String(data).trim()
-	    try {
-		    const res = await eval(cmd)
-		    console.log(res)
-	    } catch (e) {
-		    console.log(e)
-	    }
-    });
 }
+process.on("unhandledRejection", (reason, promise) => {
+	logger.error('Unhandled Rejection at: ' + promise + ' reason:' + reason)
+})
+
 const client = createClient(config.qq, {
     log_level: config.debug_mode ? 'mark' : 'off',
     platform: config.platform
@@ -44,12 +39,18 @@ function login () {
         // 未设置密码，扫码登录
         client.on('system.login.qrcode', function (e) {
             //扫码后按回车登录
-            process.stdin.once('data', () => this.login())
+            process.stdin.once('data', () => login())
         }).login();
     } else {
         client.on('system.login.slider', function (e) {
-            logger.log('本次登录需要滑动验证码，请在验证后输入ticket并回车。')
-            process.stdin.once('data', (ticket) => this.submitSlider(ticket))
+            logger.info('本次登录需要滑动验证码，请在验证后输入ticket并回车。');
+            logger.info(e.url);
+            process.stdin.once('data', (ticket) => client.sliderLogin(ticket));
+        }).on('system.login.device', function (e) {
+            logger.info('本次登录需要设备锁验证，请在验证后输入短信验证码并回车。');
+            logger.info(e.url);
+            client.sendSMSCode();
+            process.stdin.once('data', (code) => client.submitSMSCode(code));
         }).login(config.password);
     }
     
