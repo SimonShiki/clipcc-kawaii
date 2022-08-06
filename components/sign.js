@@ -41,7 +41,7 @@ class Sign {
     
     async onGroupMessage (session) {
         this.refresh();
-        if (session.raw_message === '签到' && config.workgroup.includes(session.group_id)) {
+        if (config.workgroup.includes(session.group_id) && session.raw_message === '签到') {
             const attempt = await this.attempt(parseInt(session.user_id));
             if (attempt <= 1) {
                 const jrrp = parseInt(session.user_id / this.seed % 101);
