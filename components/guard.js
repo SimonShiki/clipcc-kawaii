@@ -15,6 +15,7 @@ class Yejun {
     onGroupMessage (session) {
         if (config.workgroup.includes(session.group_id) && this.isInList(session.raw_message)) {
             this.client.setGroupBan(session.group_id, session.user_id, 60);
+            session.recall();
         }
     }
 }
