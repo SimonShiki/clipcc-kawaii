@@ -131,6 +131,8 @@ class Github {
                 } else return session.reply('你已经投票过惹', true);
             } else return session.reply('请回复 支持 或 反对');
             this.database.rewrite(args[1], original);
+            
+            session.reply(`你为 ${original.title} (详情请访问 https://github.com/Clipteam/clip-community/issues/${original.issue}) 投出了宝贵的一票！`, true);
             await this.octokit.rest.issues.createComment({
                 owner: 'Clipteam',
                 repo: 'clip-community',
