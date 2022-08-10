@@ -129,7 +129,7 @@ class Github {
                 if (original.agree.indexOf(session.user_id) === -1 && original.refuse.indexOf(session.user_id) === -1) {
                     original.refuse.push(session.user_id);
                 } else return session.reply('你已经投票过惹', true);
-            } else return;
+            } else return session.reply('请回复 支持 或 反对');
             this.database.rewrite(args[1], original);
             await this.octokit.rest.issues.createComment({
                 owner: 'Clipteam',
