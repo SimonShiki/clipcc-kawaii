@@ -88,10 +88,10 @@ class Github {
     async entry (session, type) {
         // 指令
         if (session.raw_message === '查看用法') {
-            return session.reply('(以下指令同时适用于临时会话/群聊/好友当中)\n\n功能请求 - 提出功能请求，通过投票的方式来决定是否实现与实现优先级\n漏洞汇报 - 汇报别针社区的漏洞\n\n以上内容均会同步至 https://github.com/Clipteam/clip-community 的 issue 区，直接创建的 issue 将不被受理。\n⚠️如有安全性问题请直接联系管理员，不要继续通过机器人提交');
+            return session.reply('功能请求 - 提出功能请求，通过投票的方式来决定是否实现与实现优先级\n漏洞汇报 - 汇报别针社区的漏洞\n查看列表 - 列出所有漏洞/功能请求\n\n以上内容均会同步至 https://github.com/Clipteam/clip-community 的 issue 区，直接创建的 issue 将不被受理。\n⚠️如有安全性问题请直接联系管理员，不要继续通过机器人提交');
         }
         
-        if (session.raw_message === '当前功能') {
+        if (session.raw_message === '查看列表') {
             return session.reply('https://github.com/Clipteam/clip-community/issues?q=is%3Aopen+is%3Aissue');
         }
     
@@ -160,16 +160,16 @@ class Github {
                         owner: 'Clipteam',
                         repo: 'clip-community',
                         issue_number: original.issue,
-                        name: 'pending'
+                        name: 'voting'
                     });
                     await this.octokit.rest.issues.addLabels({
                         owner: 'Clipteam',
                         repo: 'clip-community',
                         issue_number: original.issue,
-                        labels: [{name: 'planning'}]
+                        labels: ['pending']
                     });
                 } catch (e) {
-                    session.reply('为啥不能标记为 planning 捏？这里现场 @Simon');
+                    session.reply('为啥不能标记为 planning 捏？这里现场 @Shiki');
                     console.log(e);
                 }
             }
@@ -210,7 +210,7 @@ class Github {
                 repo: 'clip-community',
                 title: this.request[session.user_id].title,
                 body: featureTemplate(requestid, this.request[session.user_id]),
-                labels: ['feature', 'pending']
+                labels: ['feature', 'voting']
             });
             const edited = this.database.read(requestid);
             edited.issue = issue.data.number;
