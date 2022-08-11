@@ -123,10 +123,10 @@ class Github {
             const issue_data = await this.octokit.issues.get({
                 owner: 'Clipteam',
                 repo: 'clip-community',
-                issue_number: origin.issue,
+                issue_number: original.issue,
             })
 
-            if(issue_data.data.locked) {
+            if(issue_data.data.locked || issue_data.data.state !== 'open') {
                 return session.reply('该请求不能投票惹~', true);
             }
 
