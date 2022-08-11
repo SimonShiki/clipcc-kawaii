@@ -150,7 +150,7 @@ class Github {
                 body: `## 🫧 当前状态\n### 支持: ${original.agree.length}\n### 反对: ${original.refuse.length}`,
             });
             if (isPlanning(original.agree.length, original.refuse.length)) {
-                return session.reply('🥳 功能请求已正式通过！');
+                session.reply('🥳 功能请求已正式通过！');
                 try {
                     await this.octokit.rest.issues.removeLabel({
                         owner: 'Clipteam',
