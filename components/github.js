@@ -120,6 +120,16 @@ class Github {
             if (original.type !== 'feature') return session.reply('该请求并非功能请求!', true);
             if (isPlanning(original.agree.length, original.refuse.length)) return session.reply('尘埃落定啦...', true);
             
+            const issue_data = await this.octokit.issues.get({
+                owner: 'Clipteam',
+                repo: 'clip-community',
+                issue_number: origin.issue,
+            })
+
+            if(issue_data.data.locked) {
+                return session.reply('该请求不能投票惹~', true);
+            }
+
             if (args[2] === '支持') {
                 if (original.agree.indexOf(session.user_id) === -1 && original.refuse.indexOf(session.user_id) === -1) {
                     original.agree.push(session.user_id);
