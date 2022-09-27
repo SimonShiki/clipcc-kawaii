@@ -14,7 +14,7 @@ class Sign {
         const now = dayjs().format('DD/MM/YYYY');
         if (now !== storage.getItem('date')) {
             storage.setItem('user', '{}');
-            storage.setItem('seed', Math.round(Math.random() * 100));
+            storage.setItem('seed', Math.round(Math.random() * 100 + 1));
             storage.setItem('date', now);
         }
     }
