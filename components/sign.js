@@ -16,6 +16,7 @@ class Sign {
             storage.setItem('user', '{}');
             storage.setItem('seed', Math.round(Math.random() * 100 + 1));
             storage.setItem('date', now);
+            return true;
         }
     }
     
@@ -42,14 +43,14 @@ class Sign {
     async onGroupMessage (session) {
         if (!config.workgroup.includes(session.group_id)) return;
         
-        this.refresh();
+        const result = this.refresh();
         if (session.raw_message.trim() === '签到') {
             const attempt = await this.attempt(parseInt(session.user_id));
             if (attempt <= 1) {
                 const jrrp = parseInt(session.user_id / this.seed % 101);
-                session.reply('签到成功(≧▽≦)！你今天的人品是：'+ jrrp);
+                session.reply('签到成功(≧▽≦)！你今天的人品是：'+ jrrp, true);
             } else if (attempt == 2) {
-                session.reply('你知道吗，反复签到可是要掉脑袋的(๑•﹏•)');
+                session.reply('你知道吗，反复签到可是要掉脑袋的(๑•﹏•)', true);
             } else {
                 try {
                     this.client.setGroupBan(session.group_id, session.user_id, attempt ** attempt * 60);
@@ -57,9 +58,6 @@ class Sign {
                     //session.reply(poisonous.data.data.comment);
                 } catch (e) {}
             }
-        }
-        if (session.raw_message.trim() === '签退') {
-            session.reply('签退成功(≧▽≦)！你今天的人品是：0');
         }
     }
 
