@@ -40,8 +40,10 @@ class Sign {
     }
     
     async onGroupMessage (session) {
+        if (!config.workgroup.includes(session.group_id)) return;
+        
         this.refresh();
-        if (config.workgroup.includes(session.group_id) && session.raw_message === '签到') {
+        if (session.raw_message.trim() === '签到') {
             const attempt = await this.attempt(parseInt(session.user_id));
             if (attempt <= 1) {
                 const jrrp = parseInt(session.user_id / this.seed % 101);
@@ -55,6 +57,9 @@ class Sign {
                     //session.reply(poisonous.data.data.comment);
                 } catch (e) {}
             }
+        }
+        if (session.raw_message.trim() === '签退') {
+            session.reply('签退成功(≧▽≦)！你今天的人品是：0');
         }
     }
 
