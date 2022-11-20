@@ -45,7 +45,9 @@ function login () {
         client.on('system.login.slider', function (e) {
             logger.info('本次登录需要滑动验证码，请在验证后输入ticket并回车。');
             logger.info(e.url);
-            process.stdin.once('data', (ticket) => client.sliderLogin(ticket));
+            process.stdin.once('data', (ticket) => {
+                client.sliderLogin(ticket);
+            });
         }).on('system.login.device', function (e) {
             logger.info('本次登录需要设备锁验证，请在验证后输入短信验证码并回车。');
             logger.info(e.url);
@@ -58,6 +60,10 @@ function login () {
         logger.info('已登录!开始加载组件...');
         if (guild instanceof GuildApp) guild.reloadGuilds();
         loadComponents();
+    });
+    
+    client.on('system.login.error', (e) => {
+        logger.error(e.message);
     });
 }
 
