@@ -50,7 +50,8 @@ class Sign {
                 const jrrp = parseInt(session.user_id / this.seed % 101);
                 session.reply('签到成功(≧▽≦)！你今天的人品是：'+ jrrp, true);
             } else if (attempt == 2) {
-                session.reply('你知道吗，反复签到可是要掉脑袋的(๑•﹏•)', true);
+            const jrrp = parseInt(session.user_id / this.seed % 101);
+                session.reply('你知道吗，反复签到可是要掉脑袋的(๑•﹏•) 你今天的人品是：' + jrrp, true);
             } else {
                 try {
                     this.client.setGroupBan(session.group_id, session.user_id, attempt ** attempt * 60);
