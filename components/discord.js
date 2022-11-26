@@ -15,7 +15,7 @@ class Discord {
           JSON.stringify({
             content: processedMessage,
             username: session.sender.nickname,
-            avatar_url: session.member.getAvatarUrl(100)
+            avatar_url: session.member.getAvatarUrl(140)
           }),
         {
           headers: {
@@ -28,6 +28,8 @@ class Discord {
         for (const msgElem of msgArray) {
             switch (msgElem.type) {
             case 'face':
+                result.push(` [${msgElem.text}] `);
+                break;
             case 'at':
             case 'text':
                 result.push(msgElem.text);
