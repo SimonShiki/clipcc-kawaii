@@ -10,14 +10,15 @@ class Discord {
         logger.info('Discord传话组件加载成功！');
     }
     async sendWebhook(session) {
-        await axios.post(config.discord_webhook,{
+        await axios.post(config.discord_webhook,
+          JSON.stringify({
+            content: session.raw_message,
+            username: session.sender.nickname
+          }),
+        {
           headers: {
             'content-type': 'application/json'
-          },
-          data: JSON.stringify({
-             content: session.raw_message,
-             username: session.sender.nickname
-          })
+          }
         })
     }
     async onGroupMessage (session) {
