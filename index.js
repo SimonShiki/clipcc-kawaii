@@ -6,16 +6,21 @@ const logger = require('./util/logger.js');
 const components = {};
 let guild = {};
 
-logger.info('=================================');
-logger.info('          clipcc-cutie');
-logger.info('       作者：SinanGentoo');
-logger.info('=================================');
+logger.info(`
+ _  __    ___        ___    ___ ___
+| |/ /   / \\ \\      / / \\  |_ _|_ _|
+| ' /   / _ \\ \\ /\\ / / _ \\  | | | |
+| . \\  / ___ \\ V  V / ___ \\ | | | |
+|_|\\_\\/_/   \\_\\_/\\_/_/   \\_\\___|___|
+____________________
+
+`);
 logger.info('读取配置文件并尝试创建实例...');
 if (config.debug_mode) {
     logger.warn('调试模式已开启！');
 }
 process.on("unhandledRejection", (reason, promise) => {
-	logger.error('Unhandled Rejection at: ' + promise + ' reason:' + reason)
+	logger.error('Unhandled Rejection at: ', promise, ' reason:', reason)
 })
 
 const client = createClient(config.qq, {
@@ -63,7 +68,13 @@ function login () {
     });
     
     client.on('system.login.error', (e) => {
-        logger.error(e.message);
+        logger.error('登录时出现错误：' +  e.message);
+        process.exit();
+    });
+    
+    client.on('system.offline', (e) => {
+        logger.error('账号下线：' +  e.message);
+        process.exit();
     });
 }
 
