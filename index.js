@@ -1,6 +1,4 @@
-const { createClient } = require('oicq');
-const { GuildApp } = require("oicq-guild");
-
+const { createClient } = require('icqq');
 const config = require('./config.json');
 const logger = require('./util/logger.js');
 const components = {};
@@ -40,26 +38,35 @@ logger.info('尝试登录...');
 login();
 
 function login () {
-    if (!config.password || config.password === null) {
-        // 未设置密码，扫码登录
-        client.on('system.login.qrcode', function (e) {
-            //扫码后按回车登录
-            process.stdin.once('data', () => login())
-        }).login();
-    } else {
-        client.on('system.login.slider', function (e) {
-            logger.info('本次登录需要滑动验证码，请在验证后输入ticket并回车。');
-            logger.info(e.url);
-            process.stdin.once('data', (ticket) => {
-                client.sliderLogin(ticket);
-            });
-        }).on('system.login.device', function (e) {
-            logger.info('本次登录需要设备锁验证，请在验证后输入短信验证码并回车。');
-            logger.info(e.url);
-            client.sendSMSCode();
-            process.stdin.once('data', (code) => client.submitSMSCode(code));
-        }).login(config.password);
-    }
+    client.on('system.login.qrcode', function (e) {
+        //扫码后按回车登录
+        process.stdin.once('data', () => login())
+    });
+    client.on('system.login.slider', function (e) {
+        logger.info('本次登录需要滑动验证码，请在验证后输入ticket并回车。');
+        logger.info(e.url);
+        process.stdin.once('data', (ticket) => {
+            client.sliderLogin(ticket);
+        });
+    });
+    client.on('system.login.device', function (e) {
+        logger.info('请选择验证方式:(1：短信验证   其他：扫码验证)');
+        process.stdin.once('data', (data) => {
+            if (data.toString().trim() === '1') {
+                client.sendSmsCode();
+                logger.info('请输入手机收到的短信验证码:')
+                process.stdin.once('data', (res) => {
+                    client.submitSmsCode(res.toString().trim())
+                });
+            } else {
+                logger.info('扫码完成后回车继续：' + e.url)
+                process.stdin.once('data', () => {
+                    client.login();
+                });
+            }
+        });
+    });
+    client.login(config.qq, config.password);
     
     client.on('system.online', () => {
         logger.info('已登录!开始加载组件...');
@@ -109,16 +116,7 @@ function initializeCoreApi () {
 }
 
 function initializeGuildApi () {
-    guild.on('ready', async () => {
-        for (const id in components) {
-            try {
-                if (components[id].onGuildReady) components[id].onGuildReady();
-            } catch (e) {
-                logger.error(e);
-            }
-        }
-    });
-    guild.on('message', async (e) => {
+    client.on('guild.message', async (e) => {
         for (const id in components) {
             try {
                 if (components[id].onGuildMessage) components[id].onGuildMessage(e);
