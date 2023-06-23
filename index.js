@@ -21,7 +21,7 @@ process.on("unhandledRejection", (reason, promise) => {
 	logger.error('Unhandled Rejection at: ', promise, ' reason:', reason)
 })
 
-const client = createClient(config.qq, {
+const client = createClient({
     log_level: config.debug_mode ? 'mark' : 'off',
     platform: config.platform
 });
@@ -70,7 +70,6 @@ function login () {
     
     client.on('system.online', () => {
         logger.info('已登录!开始加载组件...');
-        if (guild instanceof GuildApp) guild.reloadGuilds();
         loadComponents();
     });
     
