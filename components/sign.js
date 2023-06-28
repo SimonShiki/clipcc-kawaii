@@ -5,6 +5,32 @@ const storage = new LocalStorage('./luck');
 const axios = require('axios');
 const dayjs = require('dayjs');
 
+function randomizeReply (jrrp) {
+    const seed = Math.floor(Math.random() * 10);
+    switch (seed) {
+    case 0:
+        return `你今天的人品是${jrrp}😎`;
+    case 1:
+        return `今天你的人品是👉${jrrp}👈`;
+    case 2:
+        return `you now day's people goods is ${jrrp}`
+    case 3:
+        return `今日のあなたのキャラクターは${jrrp}`
+    case 4:
+        return `签到成功(≧▽≦)！你今天的人品是：${jrrp}`
+    case 5:
+        return `🤡☀️☯️👉${jrrp}`
+    case 6:
+        return `شخصيتك اليوم${jrrp}`
+    case 7:
+        return `你的人品应该由自己决定哟!`
+    case 8:
+        return `f(jrrp)=arcsin(${Math.sin(jrrp)})`
+    case 9:
+        return `今天你的人品是${jrrp.toString(2)}`
+    }
+}
+
 class Sign {
     constructor (client) {
         this.client = client;
@@ -35,6 +61,12 @@ class Sign {
         storage.setItem('user', JSON.stringify(list));
         return attempt + 1;
     }
+
+    wait (maxTime = 5) {
+        return new Promise(resolve => {
+            setTimeout(() => resolve(), Math.random() * 1000 * maxTime);
+        });
+    }
     
     activate () {
         logger.info('签到组件加载成功！');
@@ -45,13 +77,16 @@ class Sign {
         
         const result = this.refresh();
         if (session.raw_message.trim() === '签到') {
-            const attempt = await this.attempt(parseInt(session.user_id));
+            await this.wait();
+            const attempt = this.attempt(parseInt(session.user_id));
             if (attempt <= 1) {
                 const jrrp = parseInt(session.user_id / this.seed % 101);
-                session.reply('签到成功(≧▽≦)！你今天的人品是：'+ jrrp, true);
+                session.reply(randomizeReply(jrrp), true);
+                /*
             } else if (attempt == 2) {
             const jrrp = parseInt(session.user_id / this.seed % 101);
                 session.reply('你知道吗，反复签到可是要掉脑袋的(๑•﹏•) 你今天的人品是：' + jrrp, true);
+            */
             } else {
                 try {
                     this.client.setGroupBan(session.group_id, session.user_id, attempt ** attempt * 60);
