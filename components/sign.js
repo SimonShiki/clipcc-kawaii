@@ -5,8 +5,8 @@ const storage = new LocalStorage('./luck');
 const axios = require('axios');
 const dayjs = require('dayjs');
 
-function randomizeReply (jrrp) {
-    const seed = Math.floor(Math.random() * 10);
+function randomizeReply (jrrp, time) {
+    const seed = Math.floor(Math.random() * 15);
     switch (seed) {
     case 0:
         return `你今天的人品是${jrrp}😎`;
@@ -27,7 +27,17 @@ function randomizeReply (jrrp) {
     case 8:
         return `f(jrrp)=arcsin(${Math.sin(jrrp)})`
     case 9:
-        return `今天你的人品是${jrrp.toString(2)}`
+        return `今天你的人品是${jrrp.toString(2)}，不过是二进制`
+    case 10:
+        return `f(jrrp)=e^${Math.log(jrrp)}`
+    case 11:
+        return `Can't keep up! Did the system time change, or is your jrrp overloaded? Running ${time}ms or ${jrrp} points behind`
+    case 12:
+        return `今天你的人品是${jrrp}!!!!!`
+    case 13:
+        return `你今天的人品是 ${String.fromCharCode(jrrp)}`
+    case 14:
+        return `今日人品签到是怎么回事呢？今日人品相信大家都很熟悉，但是今日人品签到是怎么回事呢，下面就让小编带大家一起了解吧。\n今日人品签到，其实就是你今天没有人品，大家可能会很惊讶今日人品怎么会签到呢？但事实就是这样，小编也感到非常惊讶。\n这就是关于今日人品签到的事情了，大家有什么想法呢，欢迎在评论区告诉小编一起讨论哦！`
     }
 }
 
@@ -62,9 +72,10 @@ class Sign {
         return attempt + 1;
     }
 
-    wait (maxTime = 5) {
+    wait (maxTime = 10) {
         return new Promise(resolve => {
-            setTimeout(() => resolve(), Math.random() * 1000 * maxTime);
+            const time = Math.random() * 1000 * maxTime;
+            setTimeout(() => resolve(time), time);
         });
     }
     
@@ -77,11 +88,11 @@ class Sign {
         
         const result = this.refresh();
         if (session.raw_message.trim() === '签到') {
-            await this.wait();
+            const time = await this.wait();
             const attempt = this.attempt(parseInt(session.user_id));
             if (attempt <= 1) {
                 const jrrp = parseInt(session.user_id / this.seed % 101);
-                session.reply(randomizeReply(jrrp), true);
+                session.reply(randomizeReply(jrrp, time), true);
                 /*
             } else if (attempt == 2) {
             const jrrp = parseInt(session.user_id / this.seed % 101);
