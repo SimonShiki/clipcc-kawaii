@@ -15,6 +15,7 @@ class Song {
         if (!config.workgroup.includes(session.group_id)) return;
         
         if (session.raw_message.startsWith('点歌')) {
+            if (!admin.includes(session.user_id)) return;
             const word = session.raw_message.replace("点歌", "").trim();
             if (!word) return;
             http.get(`http://s.music.163.com/search/get/?type=1&s=${word}&limit=1`, res => {
