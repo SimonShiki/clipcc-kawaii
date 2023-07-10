@@ -2,6 +2,7 @@
     "qq": 1145141919,
     "platform": 1,
     "password": "",
+    "sign_api_addr": "",
     "ghp": "",
     "use_guild": false,
     "components": ["sign"],

@@ -23,7 +23,8 @@ process.on("unhandledRejection", (reason, promise) => {
 
 const client = createClient({
     log_level: config.debug_mode ? 'mark' : 'off',
-    platform: config.platform
+    platform: config.platform,
+    sign_api_addr: config.sign_api_addr
 });
 
 logger.info('初始化接口...');
