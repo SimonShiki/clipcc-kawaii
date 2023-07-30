@@ -130,7 +130,7 @@ class Github {
                 issue_number: original.issue,
             })
 
-            if(issue_data.data.locked) {
+            if(issue_data.data.locked || issue_data.data.state !== 'open') {
                 return session.reply('该请求不能投票惹~', true);
             }
 
