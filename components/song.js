@@ -9,9 +9,10 @@ class Song {
     constructor (client) {
         this.client = client;
         try {
-            this.songList = JSON.parse(storage.getItem('list'));
+            this.songList = JSON.parse(storage.getItem('list')) || [];
         } catch (e) {
             storage.setItem('list', '[]');
+            this.songList = [];
         }
         const job = schedule.scheduleJob({hour: 23, dayOfWeek: 0}, () => {
             const group = this.client.pickGroup(config.ccgroup);
@@ -32,10 +33,6 @@ class Song {
                 logger.error(e);
             })
         });
-        process.on('SIGINT', function () { 
-            schedule.gracefulShutdown()
-        .then(() => process.exit(0))
-}
     }
 
     activate () {
@@ -66,7 +63,7 @@ class Song {
                 logger.error(e);
             })
         } else if (session.raw_message.startsWith('加歌')) {
-            const word = session.raw_message.replace("点歌", "").trim();
+            const word = session.raw_message.replace("加歌", "").trim();
             if (!word) return;
             this.songList.push(word);
             storage.setItem('list', JSON.stringify(this.songList));
