@@ -13,8 +13,9 @@
     "@octokit/rest": "^19.0.3",
     "axios": "^0.21.1",
     "dayjs": "^1.10.7",
-    "node-localstorage": "^2.2.1",
     "icqq": "^0.4.2",
+    "node-localstorage": "^2.2.1",
+    "node-schedule": "^2.1.1",
     "piston-client": "^1.0.2"
   },
   "devDependencies": {
