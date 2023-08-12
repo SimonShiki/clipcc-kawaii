@@ -44,7 +44,7 @@ class Song {
     
     async onGroupMessage (session) {
         if (!config.workgroup.includes(session.group_id)) return;
-        if (!admin.includes(session.user_id)) return;
+        if (!config.admin.includes(session.user_id)) return;
 
         if (session.raw_message.startsWith('点歌')) {
             const word = session.raw_message.replace("点歌", "").trim();
